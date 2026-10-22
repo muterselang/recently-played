@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
+import Header from "./components/Header";
+import "./styles/layout.css";
 
 export default function App() {
   const [tracks, setTracks] = useState([]);
@@ -34,14 +36,7 @@ export default function App() {
 
   return (
     <main>
-      <header>
-        <h1>Recently Played</h1>
-        <p>
-          {status === "loading..." && "Loading listening history..."}
-          {status === "success" && `${tracks.length} tracks archived`}
-          {status === "failed" && "Could not load listening history"}
-        </p>
-      </header>
+      <Header status={status} trackCount={tracks.length} />
 
       {error && <p>Error: {error}</p>}
 

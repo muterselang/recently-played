@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Recently Played Collector",
+  "version": "0.2.0",
+  "description": "Collects listening history from Apple Music and Bandcamp.",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["https://music.apple.com/*"],
+      "js": ["config.js", "content.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*.bandcamp.com/*"],
+      "js": ["config.js", "bandcamp.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

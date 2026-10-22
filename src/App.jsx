@@ -1,35 +1,78 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { supabase } from "./lib/supabase";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [tracks, setTracks] = useState([]);
+  const [status, setStatus] = useState("loading...");
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchTracks() {
+      const { data, error } = await supabase
+        .from("listens")
+        .select("id, title, artist, album, artwork, played_at, source")
+        .order("played_at", { ascending: false })
+        .limit(100);
+
+      if (error) {
+        console.error("[Supabase] Fetch failed:", error);
+        setError(error.message);
+        setStatus("failed");
+        return;
+      }
+
+      setTracks(data ?? []);
+      setStatus("success");
+    }
+
+    fetchTracks();
+
+    const interval = setInterval(fetchTracks, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+    <main>
+      <header>
+        <h1>Recently Played</h1>
         <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
+          {status === "loading..." && "Loading listening history..."}
+          {status === "success" && `${tracks.length} tracks archived`}
+          {status === "failed" && "Could not load listening history"}
         </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      </header>
 
-export default App
+      {error && <p>Error: {error}</p>}
+
+      <ol>
+        {tracks.map((track) => (
+          <li key={track.id}>
+            <article>
+              {track.artwork?.[0] && (
+                <img
+                  src={track.artwork[0]}
+                  alt={`Artwork for ${track.album || track.title}`}
+                  width="80"
+                  height="80"
+                  loading="lazy"
+                />
+              )}
+
+              <div>
+                <h2>{track.title}</h2>
+                <p>{track.artist || "Unknown artist"}</p>
+                <p>{track.album || "Unknown album"}</p>
+                <p>
+                  {track.source === "bandcamp" ? "Bandcamp" : "Apple Music"}
+                  {" · "}
+                  {new Date(track.played_at).toLocaleString()}
+                </p>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ol>
+    </main>
+  );
+}

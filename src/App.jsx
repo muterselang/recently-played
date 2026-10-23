@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import Header from "./components/Header";
 import { groupAlbums } from "./lib/groupAlbums";
-import AlbumCarousel from "./components/AlbumCarousel";
+// import AlbumCarousel from "./components/AlbumCarousel";
 import "./styles/layout.css";
+import RecentStrip from "./components/RecentStrip";
+import NowPlaying from "./components/NowPlaying";
 
 export default function App() {
   const [tracks, setTracks] = useState([]);
@@ -44,8 +46,9 @@ export default function App() {
 
       {error && <p>Error: {error}</p>}
 
-      <AlbumCarousel albums={albums} />
+      <RecentStrip albums={albums} />
 
+      <NowPlaying track={tracks[0] ?? null} />
       {/* <section>
         <h2>Album archive</h2>
         <p>{albums.length} unique albums</p>
@@ -79,7 +82,7 @@ export default function App() {
         </ol>
       </section> */}
 
-      <ol>
+      {/* <ol>
         {tracks.map((track) => (
           <li key={track.id}>
             <article>
@@ -105,7 +108,7 @@ export default function App() {
             </article>
           </li>
         ))}
-      </ol>
+      </ol> */}
     </main>
   );
 }

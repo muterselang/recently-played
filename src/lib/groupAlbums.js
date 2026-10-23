@@ -18,7 +18,9 @@ export function groupAlbums(tracks) {
         key,
         album: albumName,
         artist: artistName || "Unknown artist",
-        artwork: track.artwork?.[0] || null,
+        artwork:
+          track.artwork?.[0]?.replace(/\/\d+x\d+bb\.jpg$/, "/600x600bb.jpg") ||
+          null,
         latestPlayedAt: track.played_at,
         source: track.source,
         tracks: [track],
@@ -32,7 +34,9 @@ export function groupAlbums(tracks) {
     // Keep the timestamp and artwork from the newest record.
     if (new Date(track.played_at) > new Date(existingAlbum.latestPlayedAt)) {
       existingAlbum.latestPlayedAt = track.played_at;
-      existingAlbum.artwork = track.artwork?.[0] || existingAlbum.artwork;
+      existingAlbum.artwork =
+        track.artwork?.[0]?.replace(/\/\d+x\d+bb\.jpg$/, "/600x600bb.jpg") ||
+        existingAlbum.artwork;
       existingAlbum.source = track.source;
     }
   }

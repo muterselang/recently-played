@@ -30,7 +30,7 @@ export default function AlbumCarousel({ albums }) {
     <section className="archive-composition">
       <header className="composition-heading">
         <h2>{month}</h2>
-        <p>{albums.length} albums archived</p>
+        <p>{albums.length} albums listened</p>
       </header>
 
       <div className="composition-field">
@@ -65,8 +65,6 @@ export default function AlbumCarousel({ albums }) {
             </article>
           ))}
         </div>
-
-        <footer className="composition-footer">sounds</footer>
       </div>
     </section>
   );

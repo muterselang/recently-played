@@ -2,18 +2,21 @@ export default function NowPlaying({ track }) {
   if (!track) {
     return (
       <section className="now-playing">
-        <h2 className="now-playing-label">NOW PLAYING</h2>
+        <h2 className="now-playing-label">listening now</h2>
 
         <p className="now-playing-empty">No listening history recorded yet.</p>
       </section>
     );
   }
 
-  const artwork = track.artwork?.[0];
+  const artwork = track.artwork?.[0]?.replace(
+    /\/\d+x\d+bb\.jpg(?=\?|$)/,
+    "/1000x1000bb.jpg"
+  );
 
   return (
     <section className="now-playing">
-      <h2 className="now-playing-label">NOW PLAYING</h2>
+      <h2 className="now-playing-label">currently listening to</h2>
 
       <div className="now-playing-content">
         <div className="now-playing-cover">

@@ -1,9 +1,12 @@
+/* ========================================
+   Site header
+======================================== */
+
 .site-header {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--grid-gap);
   padding: 20px var(--page-padding) 16px;
-  /* border-bottom: 1px solid var(--color-line); */
 }
 
 .site-title {
@@ -42,193 +45,12 @@
   font-variant-numeric: tabular-nums;
 }
 
-@media (max-width: 600px) {
-  .site-header {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    row-gap: 16px;
-  }
-
-  .site-title {
-    grid-column: 1 / 4;
-  }
-
-  .site-description {
-    grid-column: 1 / 4;
-    grid-row: 2;
-  }
-
-  .archive-status {
-    grid-column: 4 / 5;
-    grid-row: 1 / 3;
-    justify-self: end;
-    overflow-wrap: anywhere;
-  }
-}
-
-/* Editorial album composition */
-
-.archive-composition {
-  padding: 24px var(--page-padding);
-}
-
-.composition-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 16px;
-  padding-bottom: 12px;
-}
-
-.composition-heading h2,
-.composition-heading p {
-  font-size: 11px;
-  font-weight: 400;
-}
-
-.composition-heading h2 {
-  text-transform: lowercase;
-}
-
-.composition-heading p {
-  color: var(--color-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.composition-field {
-  position: relative;
-  padding: 20px 0 44px;
-  /* border-top: 1px solid var(--color-line);
-  border-bottom: 1px solid var(--color-line); */
-}
-
-.composition-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  /* column-gap: clamp(16px, 2vw, 24px); */
-  /* row-gap: 16px; */
-  /* align-items: start; */
-}
-
-.composition-album {
-  min-width: 0;
-}
-
-.composition-cover {
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  animation: composition-drift 10s ease-in-out infinite alternate;
-  will-change: transform;
-}
-
-.composition-cover img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Album size follows recorded listening frequency */
-
-.composition-album.is-large .composition-cover,
-.composition-album.is-large .composition-meta {
-  max-width: 184px;
-}
-
-.composition-album.is-medium .composition-cover,
-.composition-album.is-medium .composition-meta {
-  max-width: 128px;
-}
-
-.composition-album.is-small .composition-cover,
-.composition-album.is-small .composition-meta {
-  max-width: 80px;
-}
-
-/* Keep text visually attached to its cover */
-
-.composition-meta {
-  width: 100%;
-  margin-top: 7px;
-}
-
-.composition-artist,
-.composition-album-title {
-  font-size: 12px;
-  line-height: 1.35;
-  overflow-wrap: anywhere;
-}
-
-.composition-artist {
-  text-transform: uppercase;
-  transition: transform 300ms ease;
-}
-
-.composition-album:hover .composition-artist {
-  transform: translateX(5px);
-}
-
-.composition-album-title {
-  margin-top: 1px;
-  color: var(--color-muted);
-}
-
-@media (max-width: 760px) {
-  .composition-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: 20px;
-    row-gap: 24px;
-  }
-
-  .composition-album.is-large .composition-cover,
-  .composition-album.is-large .composition-meta {
-    max-width: 156px;
-  }
-
-  .composition-album.is-medium .composition-cover,
-  .composition-album.is-medium .composition-meta {
-    max-width: 112px;
-  }
-
-  .composition-album.is-small .composition-cover,
-  .composition-album.is-small .composition-meta {
-    max-width: 72px;
-  }
-}
-
-@media (max-width: 480px) {
-  .composition-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 20px;
-    row-gap: 24px;
-  }
-
-  .composition-album.is-large .composition-cover,
-  .composition-album.is-large .composition-meta {
-    max-width: 140px;
-  }
-
-  .composition-album.is-medium .composition-cover,
-  .composition-album.is-medium .composition-meta {
-    max-width: 104px;
-  }
-
-  .composition-album.is-small .composition-cover,
-  .composition-album.is-small .composition-meta {
-    max-width: 68px;
-  }
-
-  .composition-artist,
-  .composition-album-title {
-    font-size: 9px;
-  }
-}
-
-/* Recently played album strip */
+/* ========================================
+   Recent album slideshow
+======================================== */
 
 .recent-strip {
   padding: 20px var(--page-padding);
-  /* border-bottom: 1px solid var(--color-line); */
 }
 
 .recent-strip-heading {
@@ -236,13 +58,13 @@
   justify-content: space-between;
   align-items: baseline;
   gap: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .recent-strip-heading h2,
 .recent-strip-heading p {
-  font-size: 10px;
-  font-weight: 400;
+  font-size: 16px;
+  font-weight: 800;
 }
 
 .recent-strip-heading h2 {
@@ -254,14 +76,27 @@
   font-variant-numeric: tabular-nums;
 }
 
-.recent-strip-list {
-  display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-  gap: 8px;
+.recent-strip-window {
+  overflow: hidden;
+}
+
+.recent-strip-track {
+  display: flex;
+  width: max-content;
+  animation: recent-strip-scroll 35s linear infinite;
+  will-change: transform;
+}
+
+.recent-strip-group {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 10px;
+  padding-right: 10px;
 }
 
 .recent-strip-item {
-  min-width: 0;
+  flex: 0 0 100px;
+  width: 100px;
 }
 
 .recent-strip-cover {
@@ -272,33 +107,63 @@
 }
 
 .recent-strip-cover img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-@media (max-width: 600px) {
-  .recent-strip-list {
-    grid-template-columns: repeat(10, 64px);
-    overflow-x: auto;
-    padding-bottom: 4px;
+@keyframes recent-strip-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
   }
 }
 
-/* Latest recorded track */
+.recent-strip-window:hover .recent-strip-track {
+  animation-play-state: paused;
+}
+
+@media (max-width: 600px) {
+  .recent-strip-item {
+    flex-basis: 76px;
+    width: 76px;
+  }
+
+  .recent-strip-track {
+    animation-duration: 28s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recent-strip-track {
+    animation: none;
+    will-change: auto;
+  }
+
+  .recent-strip-window {
+    overflow-x: auto;
+  }
+}
+
+/* ========================================
+   Now playing
+======================================== */
 
 .now-playing {
-  width: min(100% - (var(--page-padding) * 2), 900px);
+  width: min(900px, calc(100% - var(--page-padding) * 2));
   margin: 48px auto;
   padding: 20px;
-  /* border: 1px solid var(--color-line); */
 }
 
 .now-playing-label {
   padding-bottom: 16px;
-  /* border-bottom: 1px solid var(--color-line); */
-  font-size: 10px;
-  font-weight: 400;
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
   letter-spacing: 0.02em;
 }
 
@@ -306,7 +171,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 36px 16px 24px;
+  /* padding: 36px 16px 24px; */
   text-align: center;
 }
 
@@ -326,7 +191,7 @@
 
 .now-playing-meta {
   max-width: 100%;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   overflow-wrap: anywhere;
 }
 
@@ -357,6 +222,47 @@
 .now-playing-empty {
   padding: 36px 0;
   color: var(--color-muted);
+}
+
+/* ========================================
+   Responsive layout
+======================================== */
+
+@media (max-width: 760px) {
+  .site-header {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    row-gap: 16px;
+  }
+
+  .site-title {
+    grid-column: 1 / 4;
+  }
+
+  .site-description {
+    grid-column: 1 / 4;
+    grid-row: 2;
+  }
+
+  .archive-status {
+    grid-column: 4 / 5;
+    grid-row: 1 / 3;
+    justify-self: end;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 600px) {
+  .recent-strip-list {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+
+  .recent-strip-item {
+    flex: 0 0 64px;
+  }
 }
 
 @media (max-width: 480px) {

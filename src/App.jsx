@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
-import Header from "./components/Header";
+// import Header from "./components/Header";
 import { groupAlbums } from "./lib/groupAlbums";
 // import AlbumCarousel from "./components/AlbumCarousel";
 import "./styles/layout.css";
@@ -42,7 +42,7 @@ export default function App() {
 
   return (
     <main>
-      <Header status={status} trackCount={tracks.length} />
+      {/* <Header status={status} trackCount={tracks.length} /> */}
 
       {error && <p>Error: {error}</p>}
 

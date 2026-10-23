@@ -1,6 +1,8 @@
 (() => {
   const HISTORY_KEY = "trackHistory";
   const MAX_HISTORY = 200;
+  const MIN_PLAY_SECONDS = 10;
+  const POLL_INTERVAL = 500;
   const config = globalThis.RECENTLY_PLAYED_CONFIG;
 
   if (!config?.workerUrl || !config?.ingestToken) {
@@ -8,21 +10,26 @@
     return;
   }
 
-  let lastTrackKey = "";
+  let candidate = null;
 
   function readCurrentTrack() {
-    const audioPlaying = [...document.querySelectorAll("audio")].some(
-      (audio) => !audio.paused && audio.currentTime > 0
+    const audio = [...document.querySelectorAll("audio")].find(
+      (item) => !item.paused && !item.ended && item.currentTime > 0
     );
 
-    if (!audioPlaying) return;
+    if (!audio) {
+      if (candidate) {
+        candidate.lastAudioTime = null;
+        candidate.audio = null;
+      }
+      return;
+    }
 
     let title = "";
     let artist = "";
     let album = "";
     let artwork = "";
 
-    // Layout lama: halaman album dengan .track_row_view
     const oldTrack = document.querySelector(".track_row_view.current_track");
 
     if (oldTrack) {
@@ -36,7 +43,6 @@
       artwork = document.querySelector(".trackView img")?.src ?? "";
     }
 
-    // Layout baru: halaman album dengan li.track.playing
     const newTrack = document.querySelector("li.track.playing");
 
     if (!title && newTrack) {
@@ -45,13 +51,12 @@
       const heading = document.querySelector("h1")?.innerText ?? "";
       artist = heading.split(/\nby\s*/i)[1]?.trim() ?? "";
 
-      album =
-        document
-          .querySelector('img[alt^="Album artwork for "]')
-          ?.alt.replace(/^Album artwork for\s*/i, "") ?? "";
+      const albumImage = document.querySelector(
+        'img[alt^="Album artwork for "]'
+      );
 
-      artwork =
-        document.querySelector('img[alt^="Album artwork for "]')?.src ?? "";
+      album = albumImage?.alt.replace(/^Album artwork for\s*/i, "") ?? "";
+      artwork = albumImage?.src ?? "";
     }
 
     if (!title) return;
@@ -61,7 +66,6 @@
       artist: artist || null,
       album: album || null,
       artwork: artwork ? [artwork] : [],
-      playedAt: new Date().toISOString(),
       source: "bandcamp",
     };
 
@@ -73,10 +77,49 @@
       track.album,
     ].join("::");
 
-    if (key === lastTrackKey) return;
-    lastTrackKey = key;
+    if (!candidate || candidate.key !== key) {
+      candidate = {
+        key,
+        track,
+        elapsed: 0,
+        audio,
+        lastAudioTime: audio.currentTime,
+      };
 
-    saveTrack(track, key);
+      console.log("[Recently Played] Tracking candidate:", track.title);
+      return;
+    }
+
+    // Keep metadata/artwork up to date.
+    candidate.track = track;
+
+    // Count actual audio progress, not wall-clock time.
+    // This excludes pauses and avoids counting time between tracks.
+    if (candidate.audio === audio && candidate.lastAudioTime !== null) {
+      const delta = audio.currentTime - candidate.lastAudioTime;
+
+      // Ignore seeks and unexpectedly large jumps.
+      if (delta > 0 && delta <= 2) {
+        candidate.elapsed += delta;
+      }
+    }
+
+    candidate.audio = audio;
+    candidate.lastAudioTime = audio.currentTime;
+
+    if (candidate.elapsed < MIN_PLAY_SECONDS) return;
+
+    const qualifiedTrack = {
+      ...candidate.track,
+      playedAt: new Date().toISOString(),
+    };
+
+    const qualifiedKey = candidate.key;
+
+    // Clear first so this candidate cannot be submitted repeatedly.
+    candidate = null;
+
+    saveTrack(qualifiedTrack, qualifiedKey);
   }
 
   function saveTrack(track, key) {
@@ -108,7 +151,10 @@
           return;
         }
 
-        console.log("[Recently Played] Saved Bandcamp track:", track.title);
+        console.log(
+          "[Recently Played] Qualified after 10 seconds:",
+          track.title
+        );
 
         sendTrackToWorker(track);
       });
@@ -142,5 +188,5 @@
   }
 
   readCurrentTrack();
-  setInterval(readCurrentTrack, 2000);
+  setInterval(readCurrentTrack, POLL_INTERVAL);
 })();

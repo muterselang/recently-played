@@ -6,9 +6,11 @@ import { groupAlbums } from "./lib/groupAlbums";
 import "./styles/layout.css";
 import RecentStrip from "./components/RecentStrip";
 import NowPlaying from "./components/NowPlaying";
+import useDominantColor from "./hook/useDominantColor";
 
 export default function App() {
   const [tracks, setTracks] = useState([]);
+  const currentArtwork = tracks[0]?.artwork?.[0];
   const albums = groupAlbums(tracks);
 
   const [status, setStatus] = useState("loading...");
@@ -41,6 +43,19 @@ export default function App() {
 
     return () => clearInterval(interval);
   }, []);
+  const { background, foreground } = useDominantColor(currentArtwork);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--album-background",
+      background
+    );
+
+    document.documentElement.style.setProperty(
+      "--album-foreground",
+      foreground
+    );
+  }, [background, foreground]);
 
   return (
     <main>

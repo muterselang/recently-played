@@ -19,11 +19,33 @@ export default function NowPlaying({ track }) {
       <h2 className="now-playing-label">currently listening to</h2>
 
       <div className="now-playing-content">
-        <div className="now-playing-cover">
-          {artwork && (
-            <img src={artwork} alt={`Cover of ${track.album || track.title}`} />
-          )}
-        </div>
+        {track.source_url ? (
+          <a
+            className="now-playing-cover"
+            href={track.source_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open ${track.album || track.title} on ${
+              track.source === "bandcamp" ? "Bandcamp" : "Apple Music"
+            }`}
+          >
+            {artwork && (
+              <img
+                src={artwork}
+                alt={`Cover of ${track.album || track.title}`}
+              />
+            )}
+          </a>
+        ) : (
+          <div className="now-playing-cover">
+            {artwork && (
+              <img
+                src={artwork}
+                alt={`Cover of ${track.album || track.title}`}
+              />
+            )}
+          </div>
+        )}
 
         <div className="now-playing-meta">
           <h3 className="now-playing-title">{track.title}</h3>
@@ -31,9 +53,7 @@ export default function NowPlaying({ track }) {
           <p className="now-playing-artist">
             {track.artist || "Unknown artist"}
           </p>
-
           <p className="now-playing-album">{track.album || "Unknown album"}</p>
-
           <p className="now-playing-source">
             {track.source === "bandcamp" ? "Bandcamp" : "Apple Music"}
             {" · "}

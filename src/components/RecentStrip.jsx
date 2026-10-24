@@ -35,15 +35,35 @@ export default function RecentStrip({ albums }) {
                   key={album.key}
                   title={`${album.artist} — ${album.album}`}
                 >
-                  <div className="recent-strip-cover">
-                    {album.artwork && (
-                      <img
-                        src={album.artwork}
-                        alt={copy === 0 ? `Cover of ${album.album}` : ""}
-                        loading="lazy"
-                      />
-                    )}
-                  </div>
+                  {album.sourceUrl && copy === 0 ? (
+                    <a
+                      className="recent-strip-cover"
+                      href={album.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Open ${album.album} by ${album.artist} on ${
+                        album.source === "bandcamp" ? "Bandcamp" : "Apple Music"
+                      }`}
+                    >
+                      {album.artwork && (
+                        <img
+                          src={album.artwork}
+                          alt={`Cover of ${album.album}`}
+                          loading="lazy"
+                        />
+                      )}
+                    </a>
+                  ) : (
+                    <div className="recent-strip-cover">
+                      {album.artwork && (
+                        <img
+                          src={album.artwork}
+                          alt={copy === 0 ? `Cover of ${album.album}` : ""}
+                          loading="lazy"
+                        />
+                      )}
+                    </div>
+                  )}
                 </article>
               ))}
             </div>

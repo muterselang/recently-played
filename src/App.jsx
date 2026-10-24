@@ -18,7 +18,9 @@ export default function App() {
     async function fetchTracks() {
       const { data, error } = await supabase
         .from("listens")
-        .select("id, title, artist, album, artwork, played_at, source")
+        .select(
+          "id, title, artist, album, artwork, played_at, source, source_url"
+        )
         .order("played_at", { ascending: false })
         .limit(100);
 

@@ -23,6 +23,7 @@ export function groupAlbums(tracks) {
             /\/\d+x\d+bb\.jpg(?=\?|$)/,
             "/1000x1000bb.jpg"
           ) || null,
+        sourceUrl: track.source_url || null,
         latestPlayedAt: track.played_at,
         source: track.source,
         tracks: [track],
@@ -33,7 +34,7 @@ export function groupAlbums(tracks) {
 
     existingAlbum.tracks.push(track);
 
-    // Keep the timestamp and artwork from the newest record.
+    // Keep metadata from the newest record.
     if (new Date(track.played_at) > new Date(existingAlbum.latestPlayedAt)) {
       existingAlbum.latestPlayedAt = track.played_at;
       existingAlbum.artwork =
@@ -42,6 +43,7 @@ export function groupAlbums(tracks) {
           "/1000x1000bb.jpg"
         ) || existingAlbum.artwork;
       existingAlbum.source = track.source;
+      existingAlbum.sourceUrl = track.source_url || null;
     }
   }
 

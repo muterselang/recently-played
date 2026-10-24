@@ -16,7 +16,7 @@ export default function NowPlaying({ track }) {
 
   return (
     <section className="now-playing">
-      <h2 className="now-playing-label">currently listening to</h2>
+      <h2 className="now-playing-label">last played</h2>
 
       <div className="now-playing-content">
         {track.source_url ? (

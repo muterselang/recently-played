@@ -1,9 +1,9 @@
 export default function Header({ status, trackCount }) {
   return (
     <header className="site-header">
-      <a className="site-title" href="/">
+      {/* <a className="site-title" href="/">
         Recently Played<span className="title-period">.</span>
-      </a>
+      </a> */}
 
       <p className="site-description">A personal listening archive.</p>
 

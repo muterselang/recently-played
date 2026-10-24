@@ -83,7 +83,7 @@
 .recent-strip-track {
   display: flex;
   width: max-content;
-  animation: recent-strip-scroll 35s linear infinite;
+  animation: recent-strip-scroll 40s linear infinite;
   will-change: transform;
 }
 
@@ -95,8 +95,8 @@
 }
 
 .recent-strip-item {
-  flex: 0 0 100px;
-  width: 100px;
+  flex: 0 0 120px;
+  width: 120px;
 }
 
 .recent-strip-cover {
@@ -123,9 +123,9 @@
   }
 }
 
-.recent-strip-window:hover .recent-strip-track {
+/* .recent-strip-window:hover .recent-strip-track {
   animation-play-state: paused;
-}
+} */
 
 @media (max-width: 600px) {
   .recent-strip-item {
@@ -134,7 +134,7 @@
   }
 
   .recent-strip-track {
-    animation-duration: 28s;
+    animation-duration: 35s;
   }
 }
 

@@ -50,7 +50,7 @@
 ======================================== */
 
 .recent-strip {
-  padding: 20px var(--page-padding);
+  padding: 10px;
 }
 
 .recent-strip-heading {
@@ -58,7 +58,7 @@
   justify-content: space-between;
   align-items: baseline;
   gap: 16px;
-  margin-bottom: 14px;
+  /* margin-bottom: 14px; */
 }
 
 .recent-strip-heading h2,
@@ -177,24 +177,24 @@ a.now-playing-cover:focus-visible {
 
 .now-playing {
   width: min(900px, calc(100% - var(--page-padding) * 2));
-  margin: 48px auto;
+  margin: 20px auto;
   padding: 20px;
 }
 
 .now-playing-label {
-  padding-bottom: 16px;
+  padding-bottom: 2px;
   font-size: 2rem;
-  font-weight: 800;
+  font-weight: 200;
   text-align: center;
-  letter-spacing: 0.02em;
 }
 
 .now-playing-content {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* padding: 36px 16px 24px; */
-  text-align: center;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1rem;
+  text-align: left;
 }
 
 .now-playing-cover {
@@ -212,14 +212,14 @@ a.now-playing-cover:focus-visible {
 }
 
 .now-playing-meta {
-  max-width: 100%;
-  /* margin-top: 20px; */
+  min-width: 0;
+  max-width: 360px;
   overflow-wrap: anywhere;
 }
 
 .now-playing-title {
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 800;
   line-height: 1.4;
 }
 
@@ -237,7 +237,7 @@ a.now-playing-cover:focus-visible {
 .now-playing-source {
   margin-top: 16px;
   color: var(--color-muted);
-  font-size: 10px;
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -300,5 +300,16 @@ a.now-playing-cover:focus-visible {
 
   .now-playing-cover {
     width: min(100%, 240px);
+  }
+
+  .now-playing-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .now-playing-meta {
+    flex: initial;
+    max-width: 100%;
   }
 }

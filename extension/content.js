@@ -42,6 +42,7 @@
       album: metadata.album || null,
       artwork: metadata.artwork?.map((image) => image.src) ?? [],
       source: "apple-music",
+      sourceUrl: window.location.href,
     };
 
     const trackKey = getTrackKey(track);
@@ -156,6 +157,7 @@
           artwork: track.artwork,
           playedAt: track.playedAt,
           source: "apple-music",
+          sourceUrl: track.sourceUrl,
         }),
       });
 

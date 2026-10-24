@@ -67,6 +67,7 @@
       album: album || null,
       artwork: artwork ? [artwork] : [],
       source: "bandcamp",
+      sourceUrl: window.location.href,
     };
 
     const key = [

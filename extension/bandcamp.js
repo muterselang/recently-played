@@ -11,6 +11,7 @@
   }
 
   let candidate = null;
+  let lastQualifiedTrackKey = "";
 
   function readCurrentTrack() {
     const audio = [...document.querySelectorAll("audio")].find(
@@ -78,6 +79,8 @@
       track.album,
     ].join("::");
 
+    if (key === lastQualifiedTrackKey) return;
+
     if (!candidate || candidate.key !== key) {
       candidate = {
         key,
@@ -117,6 +120,7 @@
 
     const qualifiedKey = candidate.key;
 
+    lastQualifiedTrackKey = qualifiedKey;
     // Clear first so this candidate cannot be submitted repeatedly.
     candidate = null;
 
